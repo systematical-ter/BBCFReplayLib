@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "BBCFReplayConsole": {
+      "commandName": "Project",
+      "commandLineArgs": "-i vsDGF1.dat",
+      "workingDirectory": "C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\ExampleReplays"
+    }
+  }
+}

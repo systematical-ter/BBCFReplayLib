@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 
@@ -9,7 +9,7 @@ namespace BBCFReplayLib
         private const int HEADER_OFFSET = 0x08;
         // if we're being passed just a header byte array, we'll need to
         //      subtract the header offset from all of these addresses.
-        private const int HEADER_SIZE = 0x390;
+        private const int LIST_HEADER_SIZE = 0x390;     // the part that the replay_list.dat cares about
 
         private const int CHECKSUM = 0x00;              // first 2 bytes are checksum w/ a 00 00 buffer after
         private const int UNKNOWN_1 = 0x04;             // some uint
@@ -19,6 +19,7 @@ namespace BBCFReplayLib
         private const int VALID_FLAG_OFFSET = 0x10;     // 4 bytes
         // 4 empty bytes
         private const int DATE1_OFFSET = 0x18;          // look at ReplayDate class below for breakdown of Date offsets.
+        // 4 bytes - some uint that usually is just "0A"
         // 4 empty bytes.
         private const int DATE2_OFFSET = 0x58;          // look at ReplayDate class below for breakdown of Date offsets.
         // 4 empty bytes.
@@ -46,6 +47,8 @@ namespace BBCFReplayLib
         private const int STAGE_MUSIC_2_OFFSET = 0x3a4; // ^
         private const int P1_UNKNOWN_OFFSET = 0x3a8;    // look at ReplayPlayerUnknown for offsets
         private const int P2_UNKNOWN_OFFSET = 0x414;    // look at ReplayPlayerUnknown for offsets
+
+        private const int HEADER_SIZE = P2_UNKNOWN_OFFSET + ReplayPlayerUnknown.ByteSize;
 
         private uint _valid;
         private ReplayDate _date1;
@@ -78,8 +81,6 @@ namespace BBCFReplayLib
 
         public byte[] _headerBinary = new byte[HEADER_SIZE];
 
-        public string JsonString => JsonSerializer.Serialize(this);
-
         public static ReplayHeader FromFile(string filePath)
         {
             byte[] bytes;
@@ -111,8 +112,8 @@ namespace BBCFReplayLib
                 var date1Bytes = br.ReadBytes(ReplayDate.ByteSize);
                 header._date1 = ReplayDate.FromBytes(date1Bytes);
 
+                _ = br.ReadBytes(4); // unknown what this is
                 _ = br.ReadBytes(4);
-
                 var date2Bytes = br.ReadBytes(ReplayDate.ByteSize);
                 header._date2 = ReplayDate.FromBytes(date2Bytes);
 
@@ -127,28 +128,28 @@ namespace BBCFReplayLib
                 //  and after p2 when I tried to then apply the same structure to the recorder data.
                 //  so I'm just not trying to read the region at all and will just keep an eye
                 //  to make sure there's no data there, ig
-                br.BaseStream.Seek(P2_OFFSET, SeekOrigin.Current);
+                br.BaseStream.Seek(P2_OFFSET, SeekOrigin.Begin);
                 var p2Bytes = br.ReadBytes(ReplayPlayerID.ByteSize);
                 header._p2 = ReplayPlayerID.FromBytes(p2Bytes);
 
                 // again, just forcefully seek
-                br.BaseStream.Seek(P1_CHAR_OFFSET, SeekOrigin.Current);
+                br.BaseStream.Seek(P1_CHAR_OFFSET, SeekOrigin.Begin);
                 header._p1Char = br.ReadUInt32();
                 header._p2Char = br.ReadUInt32();
 
                 var recorderBytes = br.ReadBytes(ReplayPlayerID.ByteSize);
                 header._recorder = ReplayPlayerID.FromBytes(recorderBytes);
 
-                br.BaseStream.Seek(UNKNOWN_x304, SeekOrigin.Current);
+                br.BaseStream.Seek(UNKNOWN_x304, SeekOrigin.Begin);
                 header._unknown_x304 = br.ReadUInt32();
                 header._unknown_x308 = br.ReadUInt32();
 
-                br.BaseStream.Seek(P1_LEVEL_OFFSET, SeekOrigin.Current);
+                br.BaseStream.Seek(P1_LEVEL_OFFSET, SeekOrigin.Begin);
                 header._p1Level = br.ReadUInt32();
                 header._p2Level = br.ReadUInt32();
                 header._unknown_x31c = br.ReadUInt32();
 
-                br.BaseStream.Seek(ROUNDS_TO_WIN_OFFSET_MAYBE, SeekOrigin.Current);
+                br.BaseStream.Seek(ROUNDS_TO_WIN_OFFSET_MAYBE, SeekOrigin.Begin);
                 header._roundsToWin = br.ReadUInt32();
                 header._secondsPerRound = br.ReadUInt32();
                 header._stageOrMusic1 = br.ReadUInt32();
@@ -157,7 +158,7 @@ namespace BBCFReplayLib
                 var p1UnknownBytes = br.ReadBytes(ReplayPlayerUnknown.ByteSize);
                 header._p1Unknown = ReplayPlayerUnknown.FromBytes(p1UnknownBytes);
 
-                br.BaseStream.Seek(P2_UNKNOWN_OFFSET, SeekOrigin.Current);
+                br.BaseStream.Seek(P2_UNKNOWN_OFFSET, SeekOrigin.Begin);
                 var p2UnknownBytes = br.ReadBytes(ReplayPlayerUnknown.ByteSize);
                 header._p2Unknown = ReplayPlayerUnknown.FromBytes(p2UnknownBytes);
 
@@ -165,6 +166,11 @@ namespace BBCFReplayLib
             return header;
         }
 
+        public string ToJson()
+        {
+            var json = JsonSerializer.Serialize(this);
+            return json;
+        }
     }
 
     class ReplayDate
@@ -211,7 +217,7 @@ namespace BBCFReplayLib
             using (var ms = new MemoryStream(bytes))
             using (var br = new BinaryReader(ms))
             {
-                rd._unixTimestamp = br.ReadUInt64();
+                rd._unixTimestamp = br.ReadUInt32();
                 _ = br.ReadBytes(PADDING_SIZE);
                 rd._year = br.ReadUInt32();
                 rd._month = br.ReadUInt32();
@@ -221,7 +227,7 @@ namespace BBCFReplayLib
                 rd._second = br.ReadUInt32();
                 rd._charRep = br.ReadChars(CHAR_REP_SIZE);
 
-                rd.Date = new DateTime((long)rd._unixTimestamp);
+                rd.Date = new DateTime((int)rd._year, (int)rd._month, (int)rd._day, (int)rd._hour, (int)rd._minute, (int)rd._second);
 
             }
             return rd;

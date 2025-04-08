@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 
 using BBCFReplayLib;
 using CommandLine;
@@ -32,15 +32,23 @@ class Program
 
     static string GetNewPath(string inputFile)
     {
-        var folder = Path.GetDirectoryName(inputFile);
-        var inputFileName = Path.GetFileName(inputFile);
+        var fullPath = Path.GetFullPath(inputFile);
+        var folder = Path.GetDirectoryName(fullPath);
+        var inputFileName = Path.GetFileName(fullPath);
+        inputFileName = Path.ChangeExtension(inputFileName, ".json");
         var newFileName = folder + "/json/" + inputFileName;
         return newFileName;
     }
 
     static void WriteReplayJson(string outputFile, ReplayHeader rh)
     {
-        var replayJson = rh.JsonString;
+        var dirname = Path.GetDirectoryName (outputFile);
+        if (!Path.Exists(dirname))
+        { 
+            System.IO.Directory.CreateDirectory(dirname);
+        }
+
+        var replayJson = rh.ToJson();
         File.WriteAllText(outputFile, replayJson);
     }
 
