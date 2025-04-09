@@ -24,18 +24,18 @@
   "Unknownx31c": 1,
   "RoundsToWin": 2,
   "SecondsPerRound": 99,
-  "StageOrMusic1": 86,
-  "StageOrMusic2": 52,
+  "Stage": 86,
+  "Music": 52,
   "P1Info": {
     "Unknown1": 25604,
     "CharacterID": 25,
     "Unknown2": 1,
-    "Unknown3": 0
+    "Palette": 0
   },
   "P2Info": {
     "Unknown1": 25604,
     "CharacterID": 25,
     "Unknown2": 0,
-    "Unknown3": 5
+    "Palette": 5
   }
 }
