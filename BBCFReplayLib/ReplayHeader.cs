@@ -3,45 +3,9 @@ using System.Dynamic;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BBCFReplayLib
 {
-    public class BRHelper
-    {
-        public static void EnsureEmptyFor(BinaryReader br, int duration)
-        {
-            byte[] data = br.ReadBytes(duration);
-            bool hasAllZeroes = data.All(singleByte => singleByte == 0);
-            if (!hasAllZeroes)
-            {
-                var beginReadRegion = br.BaseStream.Position - duration;
-                var endReadRegion = br.BaseStream.Position;
-                throw new InvalidDataException("Provided region " + beginReadRegion.ToString("x4") + " - " + endReadRegion.ToString("x4") + " contains data!");
-            }
-        }
-
-        /// <summary>
-        /// Given a BinaryReader, reads from the current position until the provided end position and ensures it encounters nothing except 00.
-        /// A headerOffset may be provided if the endPosition provided should be relative to some offset.
-        /// </summary>
-        /// <param name="br">BinaryReader to use.</param>
-        /// <param name="endPosition">Position to read until.</param>
-        /// <param name="headerOffset">If applicable, an offset to adjust the end position by. Defaults to 0.</param>
-        /// <exception cref="InvalidDataException">Thrown if any byte is not `00`.</exception>
-        public static void EnsureEmptyUntil(BinaryReader br, int endPosition, int headerOffset = 0)
-        {
-            var startPosition = br.BaseStream.Position;
-            var amount = (long)endPosition - headerOffset - startPosition;
-            var data = br.ReadBytes((int)amount);
-            bool hasAllZeroes = data.All(singleByte => singleByte == 0);
-            if (!hasAllZeroes)
-            {
-                throw new InvalidDataException("Provided region contains data!");
-            }
-        }
-    }
-
     public class ReplayHeader
     {
         private const int HEADER_OFFSET = 0x08;
@@ -195,18 +159,18 @@ namespace BBCFReplayLib
 
                 _ = br.ReadBytes(8);
                 header._valid = br.ReadUInt32();
-                BRHelper.EnsureEmptyFor(br, 4);
+                br.EnsureEmpty(4);
 
                 var date1Bytes = br.ReadBytes(ReplayDate.ByteSize);
                 header._date1 = ReplayDate.FromBytes(date1Bytes);
 
                 _ = br.ReadBytes(4); // unknown what this is
-                BRHelper.EnsureEmptyFor(br, 4);
+                br.EnsureEmpty(4);
                 var date2Bytes = br.ReadBytes(ReplayDate.ByteSize);
                 header._date2 = ReplayDate.FromBytes(date2Bytes);
 
                 _ = br.ReadBytes(4); // unknown what this is
-                BRHelper.EnsureEmptyFor(br, 4);
+                br.EnsureEmpty(4);
 
                 header._winnerFlag = br.ReadUInt32();
 
@@ -217,28 +181,28 @@ namespace BBCFReplayLib
                 //  and after p2 when I tried to then apply the same structure to the recorder data.
                 //  so I'm just not trying to read the region at all and will just keep an eye
                 //  to make sure there's no data there, ig
-                BRHelper.EnsureEmptyUntil(br, P2_OFFSET, HEADER_OFFSET);
+                br.EnsureEmptyUntil(P2_OFFSET, HEADER_OFFSET);
                 var p2Bytes = br.ReadBytes(ReplayPlayerID.ByteSize);
                 header._p2 = ReplayPlayerID.FromBytes(p2Bytes);
 
                 // again, just forcefully seek, making sure it's all empty until we get to our target.
-                BRHelper.EnsureEmptyUntil(br, P1_CHAR_OFFSET, HEADER_OFFSET);
+                br.EnsureEmptyUntil(P1_CHAR_OFFSET, HEADER_OFFSET);
                 header._p1Char = br.ReadUInt32();
                 header._p2Char = br.ReadUInt32();
 
                 var recorderBytes = br.ReadBytes(ReplayPlayerID.ByteSize);
                 header._recorder = ReplayPlayerID.FromBytes(recorderBytes);
 
-                BRHelper.EnsureEmptyUntil(br, UNKNOWN_x304, HEADER_OFFSET);
+                br.EnsureEmptyUntil(UNKNOWN_x304, HEADER_OFFSET);
                 header._unknown_x304 = br.ReadUInt32();
                 header._unknown_x308 = br.ReadUInt32();
 
-                BRHelper.EnsureEmptyUntil(br, P1_LEVEL_OFFSET, HEADER_OFFSET);
+                br.EnsureEmptyUntil(P1_LEVEL_OFFSET, HEADER_OFFSET);
                 header._p1Level = br.ReadUInt32();
                 header._p2Level = br.ReadUInt32();
                 header._unknown_x31c = br.ReadUInt32();
 
-                BRHelper.EnsureEmptyUntil(br, ROUNDS_TO_WIN_OFFSET, HEADER_OFFSET);
+                br.EnsureEmptyUntil(ROUNDS_TO_WIN_OFFSET, HEADER_OFFSET);
                 header._roundsToWin = br.ReadUInt32();
                 header._secondsPerRound = br.ReadUInt32();
                 header._stage = br.ReadUInt32();
@@ -247,7 +211,7 @@ namespace BBCFReplayLib
                 var p1InfoBytes = br.ReadBytes(ReplayPlayerInfo.ByteSize);
                 header._p1Info = ReplayPlayerInfo.FromBytes(p1InfoBytes);
 
-                BRHelper.EnsureEmptyUntil(br, P2_INFO_OFFSET, HEADER_OFFSET);
+                br.EnsureEmptyUntil(P2_INFO_OFFSET, HEADER_OFFSET);
                 var p2InfoBytes = br.ReadBytes(ReplayPlayerInfo.ByteSize);
                 header._p2Info = ReplayPlayerInfo.FromBytes(p2InfoBytes);
 
@@ -445,9 +409,9 @@ namespace BBCFReplayLib
             using (var br = new BinaryReader(ms))
             {
                 rpu._unknown1 = br.ReadUInt32();
-                BRHelper.EnsureEmptyFor(br, 4);
+                br.EnsureEmpty(4);
                 rpu._character = br.ReadUInt32();
-                BRHelper.EnsureEmptyFor(br, 4);
+                br.EnsureEmpty(4);
                 rpu._unknown2 = br.ReadUInt32();
                 rpu._palette = br.ReadUInt32();
             }
