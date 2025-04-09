@@ -1,0 +1,32 @@
+{
+  "IsValid": true,
+  "Date1": "2025-03-23T13:08:59",
+  "Date2": "2025-03-23T13:08:59",
+  "Winner": 1,
+  "P1": {
+    "Name": "AveryChu",
+    "SteamID": 76561198034514731
+  },
+  "P2": {
+    "Name": "Systemagical",
+    "SteamID": 76561198017479790
+  },
+  "Recorder": {
+    "Name": "Systemagical",
+    "SteamID": 76561198017479790
+  },
+  "P1CharID": 0,
+  "P2CharID": 25,
+  "P1Info": {
+    "Unknown1": 25604,
+    "CharacterID": 0,
+    "Unknown2": 1,
+    "Unknown3": 0
+  },
+  "P2Info": {
+    "Unknown1": 25604,
+    "CharacterID": 25,
+    "Unknown2": 1,
+    "Unknown3": 5
+  }
+}

@@ -2,7 +2,17 @@
   "profiles": {
     "BBCFReplayConsole": {
       "commandName": "Project",
+      "commandLineArgs": "-i vsTubazo.dat",
+      "workingDirectory": "C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\ExampleReplays"
+    },
+    "vsDGF": {
+      "commandName": "Project",
       "commandLineArgs": "-i vsDGF1.dat",
+      "workingDirectory": "C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\ExampleReplays"
+    },
+    "vsZander": {
+      "commandName": "Project",
+      "commandLineArgs": "-i vsZander.dat",
       "workingDirectory": "C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\ExampleReplays"
     }
   }

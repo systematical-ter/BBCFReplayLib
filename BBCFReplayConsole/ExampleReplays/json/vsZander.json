@@ -1,11 +1,11 @@
 {
   "IsValid": true,
-  "Date1": "2025-03-24T18:08:56",
-  "Date2": "2025-03-24T18:08:56",
+  "Date1": "2025-04-08T18:37:19",
+  "Date2": "2025-04-08T18:37:19",
   "Winner": 0,
   "P1": {
-    "Name": "ENERJAK",
-    "SteamID": 76561198088548346
+    "Name": "TheZanderBug",
+    "SteamID": 76561198061574337
   },
   "P2": {
     "Name": "Systemagical",
@@ -19,7 +19,7 @@
   "P2CharID": 25,
   "Unknownx304": 1,
   "Unknownx308": 6,
-  "P1Level": 38,
+  "P1Level": 33,
   "P2Level": 24,
   "Unknownx31c": 1,
   "RoundsToWin": 2,
@@ -29,13 +29,13 @@
   "P1Info": {
     "Unknown1": 25604,
     "CharacterID": 25,
-    "Unknown2": 1,
-    "Unknown3": 0
+    "Unknown2": 0,
+    "Unknown3": 16
   },
   "P2Info": {
     "Unknown1": 25604,
     "CharacterID": 25,
-    "Unknown2": 0,
+    "Unknown2": 1,
     "Unknown3": 5
   }
 }
