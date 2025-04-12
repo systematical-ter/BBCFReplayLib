@@ -15,24 +15,22 @@ namespace BBCFReplayLib
         private const int HEADER_SIZE = 0x390;          // the part that the replay_list.dat cares about
 
         private const int CHECKSUM = 0x00;              // first 2 bytes are checksum w/ a 00 00 buffer after
-        private const int UNKNOWN_1 = 0x04;             // some uint
-        private const int UNKNOWN_2 = 0x08;             // some uint
+        private const int UNKNOWN_x04 = 0x04;           // some uint
+        private const int UNKNOWN_x08 = 0x08;           // some uint
                                                         // technically 04+08 can be a ulong?
-        private const int UNKNOWN_3 = 0x0c;             // some uint
+        private const int UNKNOWN_x0c = 0x0c;           // some uint
         private const int VALID_FLAG_OFFSET = 0x10;     // 4 bytes
         // 4 empty bytes
         private const int DATE1_OFFSET = 0x18;          // look at ReplayDate class below for breakdown of Date offsets.
-        // 4 bytes - some uint that usually is just "0A"
+        private const int UNKNOWN_x1c = 0x1c;           // some uint (usually just "0A")
         // 4 empty bytes.
         private const int DATE2_OFFSET = 0x58;          // look at ReplayDate class below for breakdown of Date offsets.
         // 4 empty bytes.
         private const int WINNER_OFFSET = 0x98;         // was labelled "winner_maybe" by IM
         private const int P1_OFFSET = 0x9C;             // look at ReplayPlayerID for offsets
         // 00 00 buffer until the start of P2_OFFSET
-        //  todo: keep an eye on this
         private const int P2_OFFSET = 0x166;            // look at ReplayPlayerID for offsets
         // 00 00 buffer until the start of P1_CHAR_OFFSET
-        //  todo: keep an eye on this
         private const int P1_CHAR_OFFSET = 0x230;       // uint
         private const int P2_CHAR_OFFSET = 0x234;       // uint
         private const int RECORDER_OFFSET = 0x238;      // look at ReplayPlayerID for offsets
@@ -54,6 +52,9 @@ namespace BBCFReplayLib
         // total size of all the data
         private const int ByteSize = P2_INFO_OFFSET + ReplayPlayerInfo.ByteSize - HEADER_OFFSET;
 
+        private uint _unknown_x08;
+        private uint _unknown_x0c;
+        private uint _unknown_x1c;
         private uint _valid;
         private ReplayDate _date1;
         private ReplayDate _date2;
@@ -75,6 +76,12 @@ namespace BBCFReplayLib
         private ReplayPlayerInfo _p1Info;
         private ReplayPlayerInfo _p2Info;
 
+        public int Unknownx08 => (int)_unknown_x08;
+
+        // I've already found a case where this overflows to a negative in (int)
+        // might need to stop assuming everything is translatable into ints.
+        public int Unknownx0c => (int)_unknown_x0c;
+        public int Unknownx1c => (int)_unknown_x1c;
         public bool IsValid
         {
             get => _valid != 0;
@@ -157,14 +164,15 @@ namespace BBCFReplayLib
                 header._ReplayBinary = br.ReadBytes(ByteSize);
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                _ = br.ReadBytes(8);
+                header._unknown_x08 = br.ReadUInt32();
+                header._unknown_x0c = br.ReadUInt32();
                 header._valid = br.ReadUInt32();
                 br.EnsureEmpty(4);
 
                 var date1Bytes = br.ReadBytes(ReplayDate.ByteSize);
                 header._date1 = ReplayDate.FromBytes(date1Bytes);
 
-                _ = br.ReadBytes(4); // unknown what this is
+                header._unknown_x1c = br.ReadUInt32();
                 br.EnsureEmpty(4);
                 var date2Bytes = br.ReadBytes(ReplayDate.ByteSize);
                 header._date2 = ReplayDate.FromBytes(date2Bytes);
@@ -240,9 +248,11 @@ namespace BBCFReplayLib
             _ReplayBinary[STAGE_OFFSET] = (byte)_stage;
         }
 
-        public string ToJson()
+        public string ToJson(bool writeIndented = true)
         {
-            var json = JsonSerializer.Serialize(this);
+
+            var options = new JsonSerializerOptions { WriteIndented = writeIndented };
+            var json = JsonSerializer.Serialize(this, options);
             return json;
         }
 

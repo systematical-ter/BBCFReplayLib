@@ -1,4 +1,7 @@
 {
+  "Unknownx08": 25233,
+  "Unknownx0c": -1801961936,
+  "Unknownx1c": 10,
   "IsValid": true,
   "Date1": "2025-03-23T13:08:59",
   "Date2": "2025-03-23T13:08:59",
@@ -17,16 +20,25 @@
   },
   "P1CharID": 0,
   "P2CharID": 25,
+  "Unknownx304": 1,
+  "Unknownx308": 6,
+  "P1Level": 16,
+  "P2Level": 24,
+  "Unknownx31c": 1,
+  "RoundsToWin": 2,
+  "SecondsPerRound": 99,
+  "Stage": 86,
+  "Music": 25,
   "P1Info": {
     "Unknown1": 25604,
     "CharacterID": 0,
     "Unknown2": 1,
-    "Unknown3": 0
+    "Palette": 0
   },
   "P2Info": {
     "Unknown1": 25604,
     "CharacterID": 25,
     "Unknown2": 1,
-    "Unknown3": 5
+    "Palette": 5
   }
 }
