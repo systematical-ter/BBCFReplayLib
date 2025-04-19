@@ -1,10 +1,5 @@
 {
   "profiles": {
-    "BBCFReplayConsole": {
-      "commandName": "Project",
-      "commandLineArgs": "-i vsTubazo.dat",
-      "workingDirectory": "C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\ExampleReplays"
-    },
     "vsDGF": {
       "commandName": "Project",
       "commandLineArgs": "-i vsDGF1.dat",
@@ -14,6 +9,11 @@
       "commandName": "Project",
       "commandLineArgs": "-i vsZander.dat",
       "workingDirectory": "C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\ExampleReplays"
+    },
+    "RenameTest": {
+      "commandName": "Project",
+      "commandLineArgs": "rename --files vsZander.dat -o tmp -m {p1name}_{p2name}",
+      "workingDirectory": "C:\\Users\\shpil\\source\\repos\\bbcf-replay\\BBCFReplayConsole"
     }
   }
 }

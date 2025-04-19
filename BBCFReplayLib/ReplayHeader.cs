@@ -256,6 +256,16 @@ namespace BBCFReplayLib
             return json;
         }
 
+        public string GetP1CharName()
+        {
+            return Consts.GetCharName(P1CharID);
+        }
+
+        public string GetP2CharName()
+        {
+            return Consts.GetCharName(P2CharID);
+        }
+
 
 
     }

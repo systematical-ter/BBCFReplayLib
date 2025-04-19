@@ -11,4 +11,10 @@
     <ProjectReference Include="..\BBCFReplayLib\BBCFReplayLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="vsZander.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
