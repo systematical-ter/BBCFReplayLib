@@ -12,7 +12,7 @@
     },
     "RenameTest": {
       "commandName": "Project",
-      "commandLineArgs": "rename --files C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\vsZander.dat -m {p1name}_{p2name} -o C:\\Users\\shpil\\source\\repos\\BBCFReplayLib\\BBCFReplayConsole\\"
+      "commandLineArgs": "rename --files vsZander.dat -m {p1name}_{p2name}_{date}_{p1charshort}_{p2charshort} -o ..\\..\\..\\tmp"
     }
   }
 }

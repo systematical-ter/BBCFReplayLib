@@ -266,6 +266,15 @@ namespace BBCFReplayLib
             return Consts.GetCharName(P2CharID);
         }
 
+        public string GetP1CharShort()
+        {
+            return Consts.GetCharShortName(P1CharID);
+        }
+
+        public string GetP2CharShort()
+        {
+            return Consts.GetCharShortName(P2CharID);
+        }
 
 
     }

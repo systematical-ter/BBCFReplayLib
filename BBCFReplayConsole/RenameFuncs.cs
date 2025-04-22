@@ -52,11 +52,19 @@ namespace BBCFReplayConsole
                 case "p2name":
                     return(variableName, replayHeader.P2.Name);
                 case "date":
-                    return(variableName, replayHeader.Date1.ToShortTimeString());
+                    return(variableName, replayHeader.Date1.ToString("yyyy-MM-dd_hh-mm"));
+                case "day":
+                    return (variableName, replayHeader.Date1.ToString("yyyy-MM-dd"));
+                case "time":
+                    return (variableName, replayHeader.Date1.ToString("hh-mm"));
                 case "p1char":
                     return(variableName, replayHeader.GetP1CharName());
                 case "p2char":
                     return(variableName, replayHeader.GetP2CharName());
+                case "p1charshort":
+                    return (variableName, replayHeader.GetP1CharShort());
+                case "p2charshort":
+                    return (variableName, replayHeader.GetP2CharShort());
                 case "winner":
                     return (variableName, replayHeader.Winner.ToString());
                 default:

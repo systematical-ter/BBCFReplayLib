@@ -76,7 +76,13 @@ class Program
             var rh = ReadDatFile(datFilePath);
             var varMaps = ReplayRenamingTools.MapVariableValues(variableNames, rh);
             var newName = ReplayRenamingTools.CreateNewName(options.Format, varMaps);
-            var path = getNewDatPath(options.Output, newName);
+            var response = CheckOutputPath(options.Output);
+            if (response != 0) 
+            {
+                Console.WriteLine("ERR: Encountered an error while trying to rename files.");
+                return response; 
+            }
+            var path = GetNewDatPath(options.Output, newName);
             CopyDatFile(path, datFilePath, rh);
         }
 
@@ -142,10 +148,42 @@ class Program
         return outputPath;
     }
 
-    private static string getNewDatPath(string outputLoc, string fileName)
+    private static string GetNewDatPath(string outputLoc, string fileName)
     {
         var outputPath = Path.Combine(outputLoc, fileName + ".dat");
         return outputPath;
+    }
+
+    private static int CheckOutputPath(string outputLoc, bool createFolders=true)
+    {
+        if (Path.Exists(outputLoc))
+        {
+            if (!File.GetAttributes(outputLoc).HasFlag(FileAttributes.Directory))
+            {
+                Console.WriteLine($"ERR: Output location {outputLoc} already exists as a file. Aborting.");
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if(createFolders)
+        {
+            try
+            {
+                Directory.CreateDirectory(outputLoc);
+                Console.WriteLine($"Created directory {outputLoc}.");
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERR: Encountered a(n) {ex.GetType().Name} error while trying to create output directory at {outputLoc} : {ex.Message}");
+                return 1;
+            }
+        }
+        Console.WriteLine($"ERR: Provided output directory {outputLoc} does not exist, and createFolders is set to {createFolders}.");
+        return 1;
     }
 
     private static int HandleErrors(IEnumerable<Error> errors)

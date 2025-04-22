@@ -22,5 +22,20 @@ namespace BBCFReplayLib
                     throw new NotImplementedException($"Provided charID {charID} has not yet been assigned to a character.");
             }
         }
+
+        public static string GetCharShortName(int charID)
+        {
+            switch (charID)
+            {
+                case 0:
+                    return "rg";
+                case 7:
+                    return "ar";
+                case 25:
+                    return "tm";
+                default:
+                    throw new NotImplementedException($"Provided charID {charID} has not yet been assigned to a character shortname.");
+            }
+        }
     }
 }
