@@ -64,13 +64,32 @@ class Program
     private static int RunRename(RenameOptions options)
     {
         var variableNames = ReplayRenamingTools.GetVariables(options.Format);
-        List<string> datFiles = GetDatFiles(options.InputFiles);
-        foreach (string datFile in datFiles)
+        List<string> datFilePaths = GetDatFiles(options.InputFiles);
+
+        Console.WriteLine($"Found {datFilePaths.Count} data files -- continue? [y/N]");
+        var toContinue = Console.ReadLine();
+        if(toContinue != "y") { return 0; }
+        Console.WriteLine("Continuing...");
+
+        foreach (string datFilePath in datFilePaths)
         {
-            var rh = ReadInputFile(datFile);
-            
+            var rh = ReadDatFile(datFilePath);
+            var varMaps = ReplayRenamingTools.MapVariableValues(variableNames, rh);
+            var newName = ReplayRenamingTools.CreateNewName(options.Format, varMaps);
+            var path = getNewDatPath(options.Output, newName);
+            CopyDatFile(path, datFilePath, rh);
         }
+
+        Console.WriteLine($"Done. {datFilePaths.Count} files written to {options.Output}. Exiting.");
         return 0;
+    }
+
+    private static void CopyDatFile(string path, string datFilePath, ReplayHeader rh)
+    {
+        // todo: add option to overwrite, add other checks
+        File.Copy(datFilePath, path, true);
+        // make this toggleable or smth
+        File.SetCreationTime(path, rh.Date1);
     }
 
     private static int RunJson(JsonOptions options)
@@ -79,7 +98,7 @@ class Program
         foreach (var datFile in datFiles)
         {
             var outJSONPath = getJSONPath(datFile, options.Output);
-            var rh = ReadInputFile(datFile);
+            var rh = ReadDatFile(datFile);
             WriteReplayJson(outJSONPath, rh);
         }
         return 0;
@@ -94,6 +113,9 @@ class Program
         {
             if(File.GetAttributes(path).HasFlag(FileAttributes.Directory))
             {
+                var foundFolders = Directory.GetDirectories(path);
+                files.AddRange(GetDatFiles(foundFolders));
+
                 var foundFiles = Directory.GetFiles(path);
                 foreach (var foundFile in foundFiles)
                 {
@@ -120,12 +142,18 @@ class Program
         return outputPath;
     }
 
+    private static string getNewDatPath(string outputLoc, string fileName)
+    {
+        var outputPath = Path.Combine(outputLoc, fileName + ".dat");
+        return outputPath;
+    }
+
     private static int HandleErrors(IEnumerable<Error> errors)
     {
         return 1;
     }
 
-    static ReplayHeader ReadInputFile(string inputFile)
+    static ReplayHeader ReadDatFile(string inputFile)
     {
          return ReplayHeader.FromFile(inputFile);
     }

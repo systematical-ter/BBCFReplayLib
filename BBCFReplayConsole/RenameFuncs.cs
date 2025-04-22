@@ -33,9 +33,19 @@ namespace BBCFReplayConsole
             return variableValues;
         }
 
+        internal static string CreateNewName(string format, Dictionary<string, string> varMap)
+        {
+            foreach (var (varName, val) in varMap)
+            {
+                format = format.Replace($"{{{varName}}}", val);
+            }
+            return format;
+        }
+
         private static (string variableName, string variableValue) GetVariableValue(string variableName, ReplayHeader replayHeader)
         {
-            switch(variableName)
+            variableName = variableName.Replace("{", "").Replace("}", "");
+            switch (variableName)
             {
                 case "p1name":
                     return(variableName, replayHeader.P1.Name);
