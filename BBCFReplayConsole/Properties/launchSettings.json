@@ -12,7 +12,11 @@
     },
     "RenameTest": {
       "commandName": "Project",
-      "commandLineArgs": "rename --files vsZander.dat -m {p1name}_{p2name}_{date}_{p1charshort}_{p2charshort} -o ..\\..\\..\\tmp"
+      "commandLineArgs": "rename --input vsZander.dat -f {p1name}_{p2name}_{date}_{p1charshort}_{p2charshort} -o ..\\..\\..\\tmp"
+    },
+    "RenameTestFolder": {
+      "commandName": "Project",
+      "commandLineArgs": "rename --input ..\\..\\..\\TestFiles -f {p1name}_{p2name}_{date}_{p1charshort}_{p2charshort} -o ..\\..\\..\\tmp"
     }
   }
 }
