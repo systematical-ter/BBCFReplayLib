@@ -13,7 +13,7 @@ namespace BBCFReplayConsole.Helpers
     public class FileFunctions
     {
         private static Regex RegexRenameCountPattern = new(
-            @"\((?<renameCount>{[0-9]+})\)\.dat^",
+            @"\((?<renameCount>[0-9]+)\)\.dat$",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         internal static List<string> GetDatFiles(IEnumerable<string> paths)
@@ -140,17 +140,13 @@ namespace BBCFReplayConsole.Helpers
             var renameCountMatch = RegexRenameCountPattern.Match(newName);
             if (renameCountMatch.Success)
             {
-                if (int.TryParse(renameCountMatch.Value, out var renameCount))
-                {
-                    renameCount = int.Parse(renameCountMatch.Value);
-                }
-                else
+                if (!int.TryParse(renameCountMatch.Groups["renameCount"].Value, out var renameCount))
                 {
                     Log.Debug("DEBUG: Somehow, in FixNameCollision, the rename count found a match but parsing to an int failed. Defaulting to 0.");
                 }
 
-                renameCount += 1;
-                var newerName = RegexRenameCountPattern.Replace(newName, renameCount.ToString());
+                renameCount += 1; 
+                var newerName = RegexRenameCountPattern.Replace(newName, "(" + renameCount.ToString() + ").dat");
                 return newerName;
             }
 

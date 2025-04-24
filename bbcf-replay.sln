@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBCFReplayConsole", "BBCFRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBCFReplayLib.Tests", "BBCFReplayLib.Tests\BBCFReplayLib.Tests.csproj", "{BEE394DA-5AE7-4EDC-B864-7ADF8588AD70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBCFReplayConsole.Tests", "BBCFReplayConsole.Tests\BBCFReplayConsole.Tests.csproj", "{840D2434-7035-4F02-A82D-E2C7A2E2B223}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BEE394DA-5AE7-4EDC-B864-7ADF8588AD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEE394DA-5AE7-4EDC-B864-7ADF8588AD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEE394DA-5AE7-4EDC-B864-7ADF8588AD70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{840D2434-7035-4F02-A82D-E2C7A2E2B223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{840D2434-7035-4F02-A82D-E2C7A2E2B223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{840D2434-7035-4F02-A82D-E2C7A2E2B223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{840D2434-7035-4F02-A82D-E2C7A2E2B223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

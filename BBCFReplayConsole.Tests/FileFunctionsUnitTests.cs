@@ -1,4 +1,3 @@
-using Xunit;
 using Xunit.Abstractions;
 using BBCFReplayConsole.Helpers;
 
@@ -21,8 +20,8 @@ namespace BBCFReplayConsole.Tests
         public void TestNameCollisionResolution(string fileName, string expectedResult)
         {
             Output.WriteLine($"Testing {fileName} to {expectedResult}");
-            var res = "";
-            Assert.Equals(expectedResult, res);
+            var res = FileFunctions.FixNameCollision(fileName);
+            Assert.Equal(expectedResult, res);
         }
     }
 }
