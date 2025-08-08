@@ -17,6 +17,10 @@
     "RenameTestFolder": {
       "commandName": "Project",
       "commandLineArgs": "rename --input ..\\..\\..\\TestFiles -f {p1name}_{p2name}_{date}_{p1charshort}_{p2charshort} -o ..\\..\\..\\tmp"
+    },
+    "Profile 1": {
+      "commandName": "Project",
+      "commandLineArgs": "rename --input vsZander.dat -f {p1name}_{p2name}_{date}_{p1charshort}_{p2charshort} -o ..\\..\\..\\tmp"
     }
   }
 }

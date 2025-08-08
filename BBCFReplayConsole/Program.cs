@@ -104,10 +104,10 @@ class Program
             var rh = FileFunctions.ReadDatFile(datFilePath);
             var varMaps = ReplayRenamingTools.MapVariableValues(variableNames, rh);
             var newName = ReplayRenamingTools.CreateNewName(options.Format, varMaps);
-            var response = FileFunctions.ValidateOutputPath(options.Output);
+            var response = FileFunctions.ValidateOutputDir(options.Output);
             if (response != 0) 
             {
-                Log.Error("Encountered an error while trying to rename files.");
+                Log.Error("Encountered an error while trying to validate output directory.");
                 return response; 
             }
             var path = FileFunctions.GetNewDatPath(options.Output, newName);

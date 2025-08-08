@@ -258,22 +258,22 @@ namespace BBCFReplayLib
 
         public string GetP1CharName()
         {
-            return Consts.GetCharName(P1CharID);
+            return GameData.CharacterNames.GetName(P1CharID);
         }
 
         public string GetP2CharName()
         {
-            return Consts.GetCharName(P2CharID);
+            return GameData.CharacterNames.GetName(P2CharID);
         }
 
         public string GetP1CharShort()
         {
-            return Consts.GetCharShortName(P1CharID);
+            return GameData.CharacterNames.GetShortName(P1CharID);
         }
 
         public string GetP2CharShort()
         {
-            return Consts.GetCharShortName(P2CharID);
+            return GameData.CharacterNames.GetShortName(P2CharID);
         }
 
 

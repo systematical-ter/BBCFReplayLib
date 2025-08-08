@@ -72,13 +72,13 @@ namespace BBCFReplayConsole.Helpers
             return outputPath;
         }
 
-        internal static int ValidateOutputPath(string outputLoc, bool createFolders = true)
+        internal static int ValidateOutputDir(string outputLoc, bool createFolders = true)
         {
             if (Path.Exists(outputLoc))
             {
                 if (!File.GetAttributes(outputLoc).HasFlag(FileAttributes.Directory))
                 {
-                    Log.Error($"ERR: Output location {outputLoc} already exists as a file. Aborting.");
+                    Log.Error($"ERR: Output location {outputLoc} already exists as a file. Cannot create output directory. Aborting.");
                     return 1;
                 }
                 else

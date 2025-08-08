@@ -19,7 +19,7 @@ namespace BBCFReplayConsole.Tests
         [InlineData("char(1)_char(2)_date.dat", "char(1)_char(2)_date(1).dat")]
         public void TestNameCollisionResolution(string fileName, string expectedResult)
         {
-            Output.WriteLine($"Testing {fileName} to {expectedResult}");
+            Output.WriteLine($"Testing collision resolution of {fileName} to {expectedResult}");
             var res = FileFunctions.FixNameCollision(fileName);
             Assert.Equal(expectedResult, res);
         }
