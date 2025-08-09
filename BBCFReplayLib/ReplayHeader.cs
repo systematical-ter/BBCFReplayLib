@@ -139,6 +139,13 @@ namespace BBCFReplayLib
         //
         public byte[] _ReplayBinary = new byte[ByteSize + HEADER_OFFSET];
 
+        public string UID;
+
+        public ReplayHeader()
+        {
+            UID = Guid.NewGuid().ToString("N");
+        }
+
         public static ReplayHeader FromFile(string filePath)
         {
             byte[] bytes;
@@ -276,7 +283,34 @@ namespace BBCFReplayLib
             return GameData.CharacterNames.GetShortName(P2CharID);
         }
 
+        public string GetWinnerName()
+        {
+            if(Winner == 0)
+            {
+                return P1.Name;
+            }
+            else
+            {
+                return P2.Name;
+            }
+        }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || !(obj is ReplayHeader))
+            {
+                return false;
+            }
+
+            return (this.P1.SteamID == ((ReplayHeader)obj).P1.SteamID)
+                && (this.P2.SteamID == ((ReplayHeader)obj).P2.SteamID)
+                && (this.Date1 == ((ReplayHeader)obj).Date1);
+        }
+
+        public override int GetHashCode()
+        {
+            return P1.SteamID.GetHashCode() ^ P2.SteamID.GetHashCode() ^ Date1.GetHashCode();
+        }
     }
 
     class ReplayDate

@@ -16,5 +16,15 @@ namespace BBCFReplayApp
         {
             InitializeComponent();
         }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            string selected = e.Node.TreeView.SelectedNode.Text;
+            if(selected == "Files")
+            {
+                var fixCollectionSubwindow = new Subwindows.FixChaosCollectionSubwindow();
+                panel1.Controls.Add(fixCollectionSubwindow);
+            }
+        }
     }
 }
